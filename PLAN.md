@@ -25,11 +25,11 @@ An automated impact hammer system for structural dynamics testing (modal analysi
       |
  +---------+----------+-----------+-----------+
  |         |          |           |           |
-[OLED]  [Stepper   [Rotary    [Switches]  [Encoder
-        Driver]   Encoders]              (position)]
+[OLED]  [Closed-loop [Rotary    [Switches]  [Encoder
+        Driver]     Encoders]              (position)]
            |
-       [NEMA 17
-       Stepper Motor]
+       [NEMA 34 Closed-loop
+       Stepper Motor w/ Encoder]
            |
        [Hammer Arm]
            |
@@ -53,7 +53,7 @@ An automated impact hammer system for structural dynamics testing (modal analysi
 
 ### Hammer Arm Assembly
 
-- **Motor:** NEMA 17 stepper motor, mounted to a 3D-printed bracket
+- **Motor:** NEMA 34 closed-loop stepper motor (with integrated encoder), mounted to a 3D-printed or fabricated bracket. Motor + driver kit already owned.
 - **Arm:** Lightweight aluminum or carbon fiber rod (or 3D-printed), attached directly to motor shaft via a D-shaft hub
 - **Hammer tip:** PCB Piezotronics modal hammer (e.g., 086C03 or similar ICP hammer) attached to the end of the arm
 - **Cable management:** Coiled or flex cable from hammer tip to BNC connector on enclosure
@@ -80,8 +80,8 @@ An automated impact hammer system for structural dynamics testing (modal analysi
 | Component | Purpose | Wokwi Simulatable |
 |---|---|---|
 | Arduino Mega 2560 | Main controller | Yes |
-| NEMA 17 Stepper Motor | Hammer swing actuation | Yes (generic stepper) |
-| A4988 Stepper Driver | Motor current control | Yes |
+| NEMA 34 Closed-loop stepper motor | Hammer swing actuation | Yes (generic stepper) |
+| Closed-loop driver (bundled with motor) | Step/dir interface + internal PID | No |
 | Quadrature encoder (600 PPR) | Arm position feedback | Yes (rotary encoder) |
 | SSD1306 OLED 128x64 (I2C) | Display | Yes |
 | KY-040 Rotary Encoder x2 | Force knob, interval knob | Yes |
@@ -108,9 +108,9 @@ An automated impact hammer system for structural dynamics testing (modal analysi
 | 10 | HIT mode switch |
 | 11 | ZERO button |
 | 12 | Power/enable switch |
-| A4988 STEP | 54 (A0) |
-| A4988 DIR | 55 (A1) |
-| A4988 EN | 56 (A2) |
+| Driver STEP | 54 (A0) |
+| Driver DIR  | 55 (A1) |
+| Driver EN   | 56 (A2) |
 | SDA | 20 |
 | SCL | 21 |
 
@@ -145,7 +145,7 @@ IDLE → (HIT switch ON) → ARMED → WINDING_UP → SWINGING → RETRACTING �
 
 ### Libraries (Arduino)
 
-- `AccelStepper` — stepper motor control with acceleration
+- `AccelStepper` — stepper motor control with acceleration (works with closed-loop driver via step/dir)
 - `Encoder` — quadrature encoder reading
 - `Adafruit_SSD1306` + `Adafruit_GFX` — OLED display
 - `elapsedMillis` or millis()-based timing
@@ -199,10 +199,12 @@ A public Wokwi project will be maintained at: *(link TBD — add after project c
 
 ## References / Prior Work
 
-- [ ] Search for university modal hammer automation papers (search: "automated modal hammer stepper motor")
-- [ ] MIT, ETH Zurich, TU Delft structural dynamics lab publications
-- [ ] GitHub repos: search "automated impact hammer arduino"
+- [x] University papers found — all use NEMA 34 closed-loop stepper + step/dir driver interface
+- [ ] [An Open-Source, Scalable, Low-Cost Automatic Modal Hammer (2021)](https://link.springer.com/article/10.1007/s40799-021-00516-7) — Arduino-controlled; closest match to this build
+- [ ] [Smart Automatic Modal Hammer (2024)](https://link.springer.com/article/10.1007/s42417-024-01461-6) — force/velocity regression for consistent excitation
+- [ ] [AMH-ISMA System (2025)](https://link.springer.com/article/10.1007/s42417-025-02310-w) — NEMA 34 closed-loop + Raspberry Pi 5; confirms motor choice
 - [ ] PCB Piezotronics application notes for ICP signal conditioning
+- [ ] GitHub repos: search "automated impact hammer arduino"
 
 ---
 
@@ -211,7 +213,7 @@ A public Wokwi project will be maintained at: *(link TBD — add after project c
 ```
 mc-hammer/
 ├── PLAN.md              ← this file
-├── BOM.csv              ← bill of materials (build manually)
+├── BOM.md               ← bill of materials (build manually)
 ├── README.md
 ├── hardware/
 │   ├── enclosure/       ← case design, panel cutout drawings
