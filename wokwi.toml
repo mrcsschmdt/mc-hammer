@@ -1,6 +1,0 @@
-[wokwi]
-version = 1
-# After building the sketch (see software/arduino/mc-hammer/), these paths load the simulator firmware.
-# Example: arduino-cli compile --fqbn arduino:avr:mega --output-dir software/arduino/mc-hammer/build software/arduino/mc-hammer
-firmware = "software/arduino/mc-hammer/build/mc-hammer.ino.hex"
-elf = "software/arduino/mc-hammer/build/mc-hammer.ino.elf"

@@ -11,7 +11,7 @@ An automated impact hammer system for structural dynamics testing (modal analysi
 - Repeatable, single-impact hits at user-defined force and cadence
 - Portable, field-deployable system (pelican case / travel case)
 - No machining required — 3D printing for custom brackets/mounts
-- Prototype control logic in Wokwi (public simulation) before committing to hardware
+- Prototype control logic on the bench (Arduino + real I/O) before enclosure integration
 - Leverage published research from university modal hammer automation projects
 
 ---
@@ -77,21 +77,21 @@ An automated impact hammer system for structural dynamics testing (modal analysi
 
 ### Core Components
 
-| Component | Purpose | Wokwi Simulatable |
-|---|---|---|
-| Arduino Mega 2560 | Main controller | Yes |
-| NEMA 34 Closed-loop stepper motor | Hammer swing actuation | Yes (generic stepper) |
-| Closed-loop driver (bundled with motor) | Step/dir interface + internal PID | No |
-| Quadrature encoder (600 PPR) | Arm position feedback | Yes (rotary encoder) |
-| SSD1306 OLED 128x64 (I2C) | Display | Yes |
-| KY-040 Rotary Encoder x2 | Force knob, interval knob | Yes |
-| Toggle switch | Power / enable | Yes (button) |
-| Momentary switch | HIT mode on/off | Yes (button) |
-| Momentary switch | ZERO position set | Yes (button) |
-| 12V DC power supply | Stepper power | N/A |
-| Buck converter (12V → 5V) | Arduino power from same supply | N/A |
-| PCB Piezotronics modal hammer | Impact force transducer | N/A (physical only) |
-| BNC connector (panel mount) | Signal output to DAQ | N/A |
+| Component | Purpose |
+|---|---|
+| Arduino Mega 2560 | Main controller |
+| NEMA 34 Closed-loop stepper motor | Hammer swing actuation |
+| Closed-loop driver (bundled with motor) | Step/dir interface + internal PID |
+| Quadrature encoder (600 PPR) | Arm position feedback |
+| SSD1306 OLED 128x64 (I2C) | Display |
+| KY-040 Rotary Encoder x2 | Force knob, interval knob |
+| Toggle switch | Power / enable |
+| Momentary switch | HIT mode on/off |
+| Momentary switch | ZERO position set |
+| 12V DC power supply | Stepper power |
+| Buck converter (12V → 5V) | Arduino power from same supply |
+| PCB Piezotronics modal hammer | Impact force transducer |
+| BNC connector (panel mount) | Signal output to DAQ |
 
 ### Pin Assignment (Arduino Mega — draft)
 
@@ -177,26 +177,6 @@ IDLE → (HIT switch ON) → ARMED → WINDING_UP → SWINGING → RETRACTING �
 
 ---
 
-## Wokwi Simulation
-
-A public Wokwi project will be maintained at: *(link TBD — add after project creation)*
-
-### Simulation Scope
-
-- Full Arduino firmware logic (state machine, control flow)
-- OLED display output
-- Rotary encoder knob interaction
-- Button/switch behavior
-- Stepper motor stepping visualization
-
-### Simulation Limitations
-
-- No actual force feedback (no ICP hammer sensor in Wokwi)
-- Stepper motor is generic (no real inertia/torque modeling)
-- Encoder simulation is simplified
-
----
-
 ## References / Prior Work
 
 - [x] University papers found — all use NEMA 34 closed-loop stepper + step/dir driver interface
@@ -221,7 +201,6 @@ mc-hammer/
 │   └── wiring/          ← wiring diagrams, schematics
 ├── software/
 │   └── arduino/         ← main firmware (.ino and .h files)
-├── wokwi/               ← diagram.json, wokwi.toml, sketch files
 └── docs/
     └── references/      ← PDFs, links, prior art
 ```
@@ -231,8 +210,8 @@ mc-hammer/
 ## Milestones
 
 - [ ] **M1 — Plan & BOM complete:** Component list finalized, suppliers identified
-- [ ] **M2 — Wokwi prototype:** Core state machine and UI running in simulation
-- [ ] **M3 — Bench prototype:** Hardware assembled and wired on breadboard/protoboard
+- [ ] **M2 — Bench firmware:** Core state machine and UI on real Mega + peripherals (breadboard/protoboard)
+- [ ] **M3 — Integrated prototype:** Hardware assembled for hammer swing tests
 - [ ] **M4 — Enclosure build:** Electronics housed, tripod mount working
 - [ ] **M5 — Field test:** First real modal test hit, signal captured on DAQ
 - [ ] **M6 — Refinement:** Tune retract logic, calibrate force mapping, document results

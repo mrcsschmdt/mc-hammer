@@ -1,6 +1,5 @@
 /*
-  mc-hammer — Wokwi / hardware pin map matches diagram.json and PLAN.md (draft).
-  Simulation uses board-ssd1306; physical build may use SSD1309 with the same I2C wiring.
+  mc-hammer — pin map matches PLAN.md (draft). OLED: SSD1309 on hardware (I2C same wiring as typical SSD1306).
 */
 
 #include <Wire.h>
